@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Leaderboard - Performance Hub</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --secondary: #ec4899;
+            --success: #10b981;
+            --dark: #1e293b;
+            --gold: #ffd700;
+            --silver: #c0c0c0;
+            --bronze: #cd7f32;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 30px 20px;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        .header {
+            background: rgba(255,255,255,0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 25px 35px;
+            margin-bottom: 25px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .header h1 {
+            font-size: 1.6rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .btn {
+            padding: 12px 24px;
+            border-radius: 12px;
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.95rem;
+        }
+        .btn-secondary {
+            background: white;
+            color: var(--primary);
+            border: 2px solid var(--primary);
+        }
+        .btn-secondary:hover {
+            background: var(--primary);
+            color: white;
+        }
+        .leaderboard {
+            background: rgba(255,255,255,0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+        }
+        .leaderboard-item {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            padding: 18px 20px;
+            border-radius: 16px;
+            margin-bottom: 12px;
+            transition: all 0.3s;
+            border: 2px solid transparent;
+        }
+        .leaderboard-item:hover {
+            transform: translateX(5px);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        .leaderboard-item.top-1 {
+            background: linear-gradient(135deg, #fef9c3, #fef3c7);
+            border-color: var(--gold);
+        }
+        .leaderboard-item.top-2 {
+            background: linear-gradient(135deg, #f1f5f9, #e2e8f0);
+            border-color: var(--silver);
+        }
+        .leaderboard-item.top-3 {
+            background: linear-gradient(135deg, #fff7ed, #ffedd5);
+            border-color: var(--bronze);
+        }
+        .leaderboard-item.normal {
+            background: #f8fafc;
+        }
+        .rank-number {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 1.2rem;
+            flex-shrink: 0;
+        }
+        .top-1 .rank-number { background: var(--gold); color: #333; }
+        .top-2 .rank-number { background: var(--silver); color: #333; }
+        .top-3 .rank-number { background: var(--bronze); color: white; }
+        .normal .rank-number { background: #e2e8f0; color: #64748b; }
+        .student-info {
+            flex: 1;
+        }
+        .student-info .name {
+            font-weight: 700;
+            font-size: 1.1rem;
+            margin-bottom: 3px;
+        }
+        .student-info .dept {
+            font-size: 0.85rem;
+            color: #64748b;
+        }
+        .score-section {
+            text-align: right;
+        }
+        .score-section .score {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--primary);
+        }
+        .score-section .badge {
+            font-size: 0.75rem;
+            padding: 4px 10px;
+            border-radius: 10px;
+            font-weight: 700;
+            text-transform: uppercase;
+            margin-top: 5px;
+            display: inline-block;
+        }
+        .score-bar {
+            width: 120px;
+            height: 6px;
+            background: #e2e8f0;
+            border-radius: 3px;
+            margin-top: 8px;
+            overflow: hidden;
+        }
+        .score-bar-fill {
+            height: 100%;
+            border-radius: 3px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+        }
+        .level-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 0.8rem;
+            color: #64748b;
+            margin-top: 4px;
+        }
+        .podium-section {
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+            gap: 20px;
+            margin-bottom: 30px;
+            padding: 20px;
+        }
+        .podium-card {
+            text-align: center;
+            padding: 20px;
+            border-radius: 20px;
+            min-width: 180px;
+            position: relative;
+        }
+        .podium-card.first {
+            background: linear-gradient(135deg, #ffd700, #ffb700);
+            color: #333;
+            transform: scale(1.1);
+            z-index: 2;
+        }
+        .podium-card.second {
+            background: linear-gradient(135deg, #e2e8f0, #cbd5e1);
+            color: #333;
+        }
+        .podium-card.third {
+            background: linear-gradient(135deg, #cd7f32, #b87333);
+            color: white;
+        }
+        .podium-card .crown {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        .podium-card .name {
+            font-weight: 800;
+            font-size: 1.1rem;
+            margin-bottom: 5px;
+        }
+        .podium-card .score {
+            font-size: 1.8rem;
+            font-weight: 800;
+        }
+        .podium-card .dept {
+            font-size: 0.85rem;
+            opacity: 0.9;
+            margin-top: 5px;
+        }
+        @media (max-width: 768px) {
+            .podium-section { flex-direction: column; align-items: center; }
+            .podium-card.first { transform: scale(1); }
+            .header { flex-direction: column; gap: 15px; text-align: center; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1><i class="fas fa-trophy"></i> Global Leaderboard</h1>
+            <a href="/" class="btn btn-secondary"><i class="fas fa-arrow-left"></i> Back to Dashboard</a>
+        </div>
+
+        <div class="leaderboard">
+            <!-- Podium for top 3 -->
+            {% if students|length >= 3 %}
+            <div class="podium-section">
+                <div class="podium-card second">
+                    <div class="crown">🥈</div>
+                    <div class="name">{{ students[1].name }}</div>
+                    <div class="score">{{ students[1].total_score }}</div>
+                    <div class="dept">{{ students[1].department }}</div>
+                </div>
+                <div class="podium-card first">
+                    <div class="crown">👑</div>
+                    <div class="name">{{ students[0].name }}</div>
+                    <div class="score">{{ students[0].total_score }}</div>
+                    <div class="dept">{{ students[0].department }}</div>
+                </div>
+                <div class="podium-card third">
+                    <div class="crown">🥉</div>
+                    <div class="name">{{ students[2].name }}</div>
+                    <div class="score">{{ students[2].total_score }}</div>
+                    <div class="dept">{{ students[2].department }}</div>
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- Full List -->
+            {% for student in students %}
+            <div class="leaderboard-item {% if student.rank == 1 %}top-1{% elif student.rank == 2 %}top-2{% elif student.rank == 3 %}top-3{% else %}normal{% endif %}">
+                <div class="rank-number">{{ student.rank }}</div>
+                <div class="student-info">
+                    <div class="name">{{ student.name }}</div>
+                    <div class="dept">{{ student.department }} | {{ student.roll_number }}</div>
+                    <div class="level-tag"><i class="fas fa-star"></i> Level {{ student.level }}</div>
+                </div>
+                <div class="score-section">
+                    <div class="score">{{ student.total_score }}</div>
+                    <span class="badge" style="
+                        {% if student.badge == 'Platinum' %}background: linear-gradient(135deg, #e5e4e2, #d1d1d1); color: #333;
+                        {% elif student.badge == 'Gold' %}background: linear-gradient(135deg, #ffd700, #ffb700); color: #333;
+                        {% elif student.badge == 'Silver' %}background: linear-gradient(135deg, #c0c0c0, #a0a0a0); color: #333;
+                        {% elif student.badge == 'Bronze' %}background: linear-gradient(135deg, #cd7f32, #b87333); color: white;
+                        {% else %}background: #e2e8f0; color: #64748b;
+                        {% endif %}
+                    ">{{ student.badge }}</span>
+                    <div class="score-bar">
+                        <div class="score-bar-fill" style="width: {{ student.total_score }}%;"></div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</body>
+</html>

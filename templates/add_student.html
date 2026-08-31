@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Student - Performance Hub</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --secondary: #ec4899;
+            --success: #10b981;
+            --dark: #1e293b;
+            --light: #f8fafc;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 30px 20px;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        .header {
+            background: rgba(255,255,255,0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 25px 35px;
+            margin-bottom: 25px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .header h1 {
+            font-size: 1.6rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .btn {
+            padding: 12px 24px;
+            border-radius: 12px;
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.95rem;
+        }
+        .btn-secondary {
+            background: white;
+            color: var(--primary);
+            border: 2px solid var(--primary);
+        }
+        .btn-secondary:hover {
+            background: var(--primary);
+            color: white;
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            box-shadow: 0 4px 15px rgba(99,102,241,0.4);
+        }
+        .form-card {
+            background: rgba(255,255,255,0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 35px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+        }
+        .form-section {
+            margin-bottom: 30px;
+            padding-bottom: 25px;
+            border-bottom: 2px solid #e2e8f0;
+        }
+        .form-section:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+        }
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+        .section-header i {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+            color: white;
+        }
+        .section-header h3 {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--dark);
+        }
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        .form-group label {
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: #475569;
+        }
+        .form-group input, .form-group select, .form-group textarea {
+            padding: 12px 16px;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            font-size: 0.95rem;
+            font-family: 'Inter', sans-serif;
+            transition: border-color 0.3s;
+        }
+        .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+        .form-group small {
+            color: #94a3b8;
+            font-size: 0.8rem;
+        }
+        .checkbox-group {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 16px;
+            background: #f8fafc;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .checkbox-item:hover {
+            background: #ede9fe;
+        }
+        .checkbox-item input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            accent-color: var(--primary);
+        }
+        .submit-btn {
+            width: 100%;
+            padding: 16px;
+            font-size: 1.1rem;
+            margin-top: 20px;
+        }
+        .weight-info {
+            background: linear-gradient(135deg, #ede9fe, #dbeafe);
+            border-radius: 12px;
+            padding: 15px 20px;
+            margin-bottom: 25px;
+        }
+        .weight-info h4 {
+            font-size: 0.95rem;
+            margin-bottom: 10px;
+            color: var(--primary);
+        }
+        .weight-bars {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        .weight-bar {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+        .weight-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1><i class="fas fa-user-plus"></i> Add New Student</h1>
+            <a href="/" class="btn btn-secondary"><i class="fas fa-arrow-left"></i> Back to Dashboard</a>
+        </div>
+
+        <div class="form-card">
+            <div class="weight-info">
+                <h4><i class="fas fa-info-circle"></i> Performance Scoring Weights</h4>
+                <div class="weight-bars">
+                    <div class="weight-bar"><div class="weight-dot" style="background: #6366f1;"></div>Academic 35%</div>
+                    <div class="weight-bar"><div class="weight-dot" style="background: #10b981;"></div>Attendance 15%</div>
+                    <div class="weight-bar"><div class="weight-dot" style="background: #f59e0b;"></div>Sports 10%</div>
+                    <div class="weight-bar"><div class="weight-dot" style="background: #ec4899;"></div>Extra Curricular 15%</div>
+                    <div class="weight-bar"><div class="weight-dot" style="background: #8b5cf6;"></div>Core Competition 15%</div>
+                    <div class="weight-bar"><div class="weight-dot" style="background: #06b6d4;"></div>Improvement 10%</div>
+                </div>
+            </div>
+
+            <form method="POST" action="/add_student">
+                <!-- Basic Info -->
+                <div class="form-section">
+                    <div class="section-header">
+                        <i class="fas fa-id-card" style="background: var(--primary);"></i>
+                        <h3>Basic Information</h3>
+                    </div>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>Full Name *</label>
+                            <input type="text" name="name" required placeholder="Enter student name">
+                        </div>
+                        <div class="form-group">
+                            <label>Roll Number *</label>
+                            <input type="text" name="roll_number" required placeholder="e.g., CS2024001">
+                        </div>
+                        <div class="form-group">
+                            <label>Department *</label>
+                            <select name="department" required>
+                                <option value="">Select Department</option>
+                                <option>Computer Science</option>
+                                <option>Electronics</option>
+                                <option>Mechanical</option>
+                                <option>Civil</option>
+                                <option>Electrical</option>
+                                <option>Information Technology</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Year *</label>
+                            <select name="year" required>
+                                <option value="1">1st Year</option>
+                                <option value="2">2nd Year</option>
+                                <option value="3">3rd Year</option>
+                                <option value="4">4th Year</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Academic -->
+                <div class="form-section">
+                    <div class="section-header">
+                        <i class="fas fa-graduation-cap" style="background: #10b981;"></i>
+                        <h3>Academic Performance (Weight: 35%)</h3>
+                    </div>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>Current Semester GPA *</label>
+                            <input type="number" name="semester_gpa" step="0.01" min="0" max="10" required placeholder="0.00 - 10.00">
+                        </div>
+                        <div class="form-group">
+                            <label>Previous Semester GPA</label>
+                            <input type="number" name="previous_gpa" step="0.01" min="0" max="10" placeholder="For improvement tracking">
+                            <small>Used to calculate improvement score</small>
+                        </div>
+                        <div class="form-group">
+                            <label>Attendance Percentage *</label>
+                            <input type="number" name="attendance_percentage" step="0.1" min="0" max="100" required placeholder="0 - 100">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Sports -->
+                <div class="form-section">
+                    <div class="section-header">
+                        <i class="fas fa-running" style="background: #f59e0b;"></i>
+                        <h3>Sports Performance (Weight: 10%)</h3>
+                    </div>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>Sports Score (0-100)</label>
+                            <input type="number" name="sports_score" step="1" min="0" max="100" placeholder="Overall sports performance">
+                        </div>
+                        <div class="form-group" style="grid-column: 1 / -1;">
+                            <label>Sports Achievements</label>
+                            <textarea name="sports_achievements" rows="2" placeholder="e.g., Inter-college Basketball Winner, State Level Athlete"></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Extra Curricular -->
+                <div class="form-section">
+                    <div class="section-header">
+                        <i class="fas fa-star" style="background: #ec4899;"></i>
+                        <h3>Extra Curricular Activities (Weight: 15%)</h3>
+                    </div>
+                    <div class="form-grid">
+                        <div class="form-group" style="grid-column: 1 / -1;">
+                            <label>National Service Participation</label>
+                            <div class="checkbox-group">
+                                <label class="checkbox-item">
+                                    <input type="checkbox" name="nss_participation">
+                                    <span><i class="fas fa-hands-helping"></i> NSS</span>
+                                </label>
+                                <label class="checkbox-item">
+                                    <input type="checkbox" name="ncc_participation">
+                                    <span><i class="fas fa-shield-alt"></i> NCC</span>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Events Participated</label>
+                            <input type="number" name="events_participated" min="0" placeholder="Total events participated">
+                        </div>
+                        <div class="form-group">
+                            <label>Events Won</label>
+                            <input type="number" name="events_won" min="0" placeholder="Events won/awards">
+                        </div>
+                        <div class="form-group">
+                            <label>Certified Courses Completed</label>
+                            <input type="number" name="certified_courses" min="0" placeholder="NPTEL, Coursera, etc.">
+                            <small>Online/Offline certified courses</small>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Core Competition -->
+                <div class="form-section">
+                    <div class="section-header">
+                        <i class="fas fa-trophy" style="background: #8b5cf6;"></i>
+                        <h3>Core Competition & Skills (Weight: 15%)</h3>
+                    </div>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>Core Competition Score (0-100)</label>
+                            <input type="number" name="core_competition_score" step="1" min="0" max="100" placeholder="Technical/Domain competition score">
+                        </div>
+                        <div class="form-group">
+                            <label>Projects Completed</label>
+                            <input type="number" name="projects_completed" min="0" placeholder="Major/Mini projects">
+                        </div>
+                        <div class="form-group">
+                            <label>Internships</label>
+                            <input type="number" name="internships" min="0" placeholder="Industry internships">
+                        </div>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-primary submit-btn">
+                    <i class="fas fa-save"></i> Save Student & Calculate Ranking
+                </button>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Performance & Gamification System</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --secondary: #ec4899;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --dark: #1e293b;
+            --light: #f8fafc;
+            --platinum: #e5e4e2;
+            --gold: #ffd700;
+            --silver: #c0c0c0;
+            --bronze: #cd7f32;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: var(--dark);
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Header */
+        .header {
+            background: rgba(255,255,255,0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 25px 35px;
+            margin-bottom: 25px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header h1 {
+            font-size: 1.8rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .header .subtitle {
+            color: #64748b;
+            font-size: 0.9rem;
+            margin-top: 5px;
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 12px;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border-radius: 12px;
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.95rem;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            box-shadow: 0 4px 15px rgba(99,102,241,0.4);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(99,102,241,0.5);
+        }
+
+        .btn-secondary {
+            background: white;
+            color: var(--primary);
+            border: 2px solid var(--primary);
+        }
+
+        .btn-secondary:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        /* Stats Cards */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 20px;
+            margin-bottom: 25px;
+        }
+
+        .stat-card {
+            background: rgba(255,255,255,0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            padding: 25px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            transition: transform 0.3s;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .stat-card .icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+        }
+
+        .stat-card .stat-value {
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--dark);
+        }
+
+        .stat-card .stat-label {
+            color: #64748b;
+            font-size: 0.9rem;
+            margin-top: 5px;
+        }
+
+        /* Top Performers */
+        .top-performers {
+            background: rgba(255,255,255,0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 25px;
+            margin-bottom: 25px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+        }
+
+        .section-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .podium {
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+            gap: 20px;
+            margin: 30px 0;
+            min-height: 200px;
+        }
+
+        .podium-item {
+            text-align: center;
+            position: relative;
+        }
+
+        .podium-item .avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            margin: 0 auto 10px;
+            border: 4px solid;
+            background: white;
+        }
+
+        .podium-item.first .avatar {
+            border-color: var(--gold);
+            width: 100px;
+            height: 100px;
+            font-size: 2.5rem;
+        }
+
+        .podium-item.second .avatar {
+            border-color: var(--silver);
+        }
+
+        .podium-item.third .avatar {
+            border-color: var(--bronze);
+        }
+
+        .podium-item .name {
+            font-weight: 700;
+            font-size: 1rem;
+        }
+
+        .podium-item .score {
+            font-size: 1.2rem;
+            font-weight: 800;
+            color: var(--primary);
+        }
+
+        .podium-item .badge-icon {
+            font-size: 1.5rem;
+            margin-top: 5px;
+        }
+
+        .podium-base {
+            width: 120px;
+            border-radius: 10px 10px 0 0;
+            margin-top: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            color: white;
+            font-size: 1.5rem;
+        }
+
+        .first .podium-base { height: 120px; background: linear-gradient(135deg, #ffd700, #ffb700); }
+        .second .podium-base { height: 90px; background: linear-gradient(135deg, #c0c0c0, #a0a0a0); }
+        .third .podium-base { height: 70px; background: linear-gradient(135deg, #cd7f32, #b87333); }
+
+        /* Students Table */
+        .students-section {
+            background: rgba(255,255,255,0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+        }
+
+        .table-container {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        th:first-child { border-radius: 10px 0 0 0; }
+        th:last-child { border-radius: 0 10px 0 0; }
+
+        td {
+            padding: 15px;
+            border-bottom: 1px solid #e2e8f0;
+            font-size: 0.95rem;
+        }
+
+        tr:hover {
+            background: #f8fafc;
+        }
+
+        .rank-cell {
+            font-weight: 800;
+            font-size: 1.2rem;
+        }
+
+        .rank-1 { color: #ffd700; }
+        .rank-2 { color: #c0c0c0; }
+        .rank-3 { color: #cd7f32; }
+
+        .badge-pill {
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .badge-Platinum { background: linear-gradient(135deg, #e5e4e2, #d1d1d1); color: #333; }
+        .badge-Gold { background: linear-gradient(135deg, #ffd700, #ffb700); color: #333; }
+        .badge-Silver { background: linear-gradient(135deg, #c0c0c0, #a0a0a0); color: #333; }
+        .badge-Bronze { background: linear-gradient(135deg, #cd7f32, #b87333); color: white; }
+        .badge-Rookie { background: #e2e8f0; color: #64748b; }
+
+        .score-bar {
+            width: 100%;
+            height: 8px;
+            background: #e2e8f0;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .score-bar-fill {
+            height: 100%;
+            border-radius: 4px;
+            transition: width 0.5s ease;
+        }
+
+        .level-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            padding: 4px 10px;
+            background: #ede9fe;
+            color: var(--primary);
+            border-radius: 8px;
+            font-size: 0.8rem;
+            font-weight: 700;
+        }
+
+        .action-btns {
+            display: flex;
+            gap: 8px;
+        }
+
+        .btn-sm {
+            padding: 6px 12px;
+            font-size: 0.8rem;
+            border-radius: 8px;
+        }
+
+        .btn-view {
+            background: #dbeafe;
+            color: #2563eb;
+        }
+
+        .btn-delete {
+            background: #fee2e2;
+            color: #dc2626;
+        }
+
+        @media (max-width: 768px) {
+            .header { flex-direction: column; gap: 15px; text-align: center; }
+            .podium { flex-direction: column; align-items: center; }
+            .podium-base { display: none; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <div>
+                <h1><i class="fas fa-trophy"></i> Student Performance Hub</h1>
+                <div class="subtitle">Gamified Performance Tracking & Prediction System</div>
+            </div>
+            <div class="nav-buttons">
+                <a href="/rankings" class="btn btn-secondary"><i class="fas fa-list-ol"></i> Rankings</a>
+                <a href="/add_student" class="btn btn-primary"><i class="fas fa-plus"></i> Add Student</a>
+            </div>
+        </div>
+
+        <!-- Stats -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="icon" style="background: #dbeafe; color: #2563eb;"><i class="fas fa-users"></i></div>
+                <div class="stat-value">{{ stats.total_students }}</div>
+                <div class="stat-label">Total Students</div>
+            </div>
+            <div class="stat-card">
+                <div class="icon" style="background: #d1fae5; color: #059669;"><i class="fas fa-chart-line"></i></div>
+                <div class="stat-value">{{ stats.avg_score }}</div>
+                <div class="stat-label">Average Score</div>
+            </div>
+            <div class="stat-card">
+                <div class="icon" style="background: #fef3c7; color: #d97706;"><i class="fas fa-crown"></i></div>
+                <div class="stat-value">{{ stats.platinum_count + stats.gold_count }}</div>
+                <div class="stat-label">Top Performers</div>
+            </div>
+            <div class="stat-card">
+                <div class="icon" style="background: #fce7f3; color: #db2777;"><i class="fas fa-calendar-check"></i></div>
+                <div class="stat-value">{{ stats.attendance_avg }}%</div>
+                <div class="stat-label">Avg Attendance</div>
+            </div>
+        </div>
+
+        <!-- Top Performers Podium -->
+        <div class="top-performers">
+            <div class="section-title"><i class="fas fa-medal" style="color: var(--gold);"></i> Top Performers</div>
+            <div class="podium">
+                {% if top_performers|length >= 2 %}
+                <div class="podium-item second">
+                    <div class="avatar">🥈</div>
+                    <div class="name">{{ top_performers[1].name }}</div>
+                    <div class="score">{{ top_performers[1].total_score }}</div>
+                    <div class="badge-icon">{{ top_performers[1].badge }}</div>
+                    <div class="podium-base">2</div>
+                </div>
+                {% endif %}
+
+                {% if top_performers|length >= 1 %}
+                <div class="podium-item first">
+                    <div class="avatar">👑</div>
+                    <div class="name">{{ top_performers[0].name }}</div>
+                    <div class="score">{{ top_performers[0].total_score }}</div>
+                    <div class="badge-icon">{{ top_performers[0].badge }}</div>
+                    <div class="podium-base">1</div>
+                </div>
+                {% endif %}
+
+                {% if top_performers|length >= 3 %}
+                <div class="podium-item third">
+                    <div class="avatar">🥉</div>
+                    <div class="name">{{ top_performers[2].name }}</div>
+                    <div class="score">{{ top_performers[2].total_score }}</div>
+                    <div class="badge-icon">{{ top_performers[2].badge }}</div>
+                    <div class="podium-base">3</div>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Students Table -->
+        <div class="students-section">
+            <div class="section-title"><i class="fas fa-table" style="color: var(--primary);"></i> All Students</div>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Rank</th>
+                            <th>Student</th>
+                            <th>Department</th>
+                            <th>GPA</th>
+                            <th>Attendance</th>
+                            <th>Score</th>
+                            <th>Badge</th>
+                            <th>Level</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for student in students %}
+                        <tr>
+                            <td class="rank-cell rank-{{ student.rank }}">#{{ student.rank }}</td>
+                            <td>
+                                <strong>{{ student.name }}</strong><br>
+                                <small style="color: #64748b;">{{ student.roll_number }}</small>
+                            </td>
+                            <td>{{ student.department }}</td>
+                            <td>{{ student.semester_gpa }}</td>
+                            <td>{{ student.attendance_percentage }}%</td>
+                            <td>
+                                <strong>{{ student.total_score }}</strong>
+                                <div class="score-bar">
+                                    <div class="score-bar-fill" style="width: {{ student.total_score }}%; background: linear-gradient(90deg, var(--primary), var(--secondary));"></div>
+                                </div>
+                            </td>
+                            <td><span class="badge-pill badge-{{ student.badge }}">{{ student.badge }}</span></td>
+                            <td><span class="level-badge"><i class="fas fa-star"></i> Lvl {{ student.level }}</span></td>
+                            <td>
+                                <div class="action-btns">
+                                    <a href="/student/{{ student.id }}" class="btn btn-sm btn-view"><i class="fas fa-eye"></i> View</a>
+                                    <form method="POST" action="/delete_student/{{ student.id }}" style="display:inline;" onsubmit="return confirm('Delete this student?');">
+                                        <button type="submit" class="btn btn-sm btn-delete"><i class="fas fa-trash"></i></button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
